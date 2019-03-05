@@ -36,6 +36,33 @@ close 的时候需要往黑板清除 is_open 状态。
 
 tick 是为 AI 分配的行为树运行实例。每一帧执行一次 tick 实例的 tick 函数。
 
+```lua
+local Const = require "behaviour_tree.const"
+
+local mt = {}
+mt.__index = mt
+
+function mt:open()
+end
+
+function mt:run()
+end
+
+function mt:close()
+end
+
+local function new(args)
+    local obj = {
+        name = "node_name",
+        args = args,
+    }
+    setmetatable(obj, mt)
+    return obj
+end
+
+return new
+```
+
 ## TODO
 
 目前手动关闭节点的时候只关闭了叶子节点，也就是行为节点。从根节点到叶子节点这条路径上的中间控制节点并没有关闭。这种实现方式有可能对 mem_priority / mem_sequence 这种有状态的节点产生影响。下一次进入这些节点的时候会从上次被打断的地方继续执行。这种处理方式是否合理，依赖于实际使用场景。
