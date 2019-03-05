@@ -18,10 +18,10 @@ local root = Priority({
 
 -- print(inspect(root))
 
-local Tick = BT(robot, root)
+local Tick = BT.new(robot, root)
 print = function(...) end
 -- print(inspect(Tick))
-for i = 1, 3000000 do
+for i = 1, 30000 do
     --[[
     print("================", i)
     if i == 10 then
