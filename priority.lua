@@ -1,12 +1,12 @@
 local Const = require "const"
-local BTExec = require "bt_exec"
+local BTCommon = require "bt_common"
 
 local mt = {}
 mt.__index = mt
 
 function mt:run(tick)
-    for _, v in ipairs(self.children) do
-        local status, running = BTExec(v, tick)
+    for _, node in ipairs(self.children) do
+        local status, running = BTCommon.execute(node, tick)
         if status == Const.RUNNING then
             return status, running
         elseif status == Const.SUCCESS then

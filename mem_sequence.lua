@@ -1,5 +1,5 @@
 local Const = require "const"
-local BTExec = require "bt_exec"
+local BTCommon = require "bt_common"
 
 local mt = {}
 mt.__index = mt
@@ -11,7 +11,7 @@ end
 function mt:run(tick)
     local child = tick[self].runningChild
     for i = child, #self.children do
-        local status, running = BTExec(self.children[i], tick)
+        local status, running = BTCommon.execute(self.children[i], tick)
         if status == Const.RUNNING then
             tick[self].runningChild = i
             return status, running

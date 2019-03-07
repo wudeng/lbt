@@ -1,12 +1,12 @@
 
 local Const = require "const"
-local BTExec = require "bt_exec"
+local BTCommon = require "bt_common"
 
 local mt = {}
 mt.__index = mt
 
 function mt:run(tick)
-    local status, running = BTExec(self.child, tick)
+    local status, running = BTCommon.execute(self.child, tick)
     if status == Const.RUNNING then
         return status, running
     else

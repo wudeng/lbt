@@ -1,6 +1,7 @@
 local BT = require("behaviour_tree")
-local Priority = require("priority")
+local Parallel = require("parallel")
 local Sequence = require("sequence")
+local Const = require("const")
 
 local Attack = require("example.attack")
 local Flee =   require("example.flee")
@@ -8,7 +9,8 @@ local HpCheck = require("example.hp_check")
 
 local robot = {id = 1, hp = 100}
 -- 高优先级打断低优先级
-local root = Priority(
+local root = Parallel(
+    Const.FAIL_ONE,
     Sequence(
         HpCheck(50),
         Flee(5)
@@ -19,12 +21,10 @@ local root = Priority(
 -- print(inspect(root))
 
 local Tick = BT.new(robot, root)
-print = function(...) end
 -- print(inspect(Tick))
-for i = 1, 30000 do
-    --[[
+for i = 1, 30 do
     print("================", i)
-    if i == 10 then
+    if i == 5 then
         print(">>>>>>>> hp == 10")
         robot.hp = 10
     end
@@ -32,6 +32,5 @@ for i = 1, 30000 do
         print(">>>>>>>> hp == 100")
         robot.hp = 100
     end
-    ]]
     Tick:tick()
 end

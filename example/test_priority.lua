@@ -19,10 +19,8 @@ local root = Priority(
 -- print(inspect(root))
 
 local Tick = BT.new(robot, root)
-print = function(...) end
 -- print(inspect(Tick))
-for i = 1, 30000 do
-    --[[
+for i = 1, 30 do
     print("================", i)
     if i == 10 then
         print(">>>>>>>> hp == 10")
@@ -32,6 +30,5 @@ for i = 1, 30000 do
         print(">>>>>>>> hp == 100")
         robot.hp = 100
     end
-    ]]
     Tick:tick()
 end

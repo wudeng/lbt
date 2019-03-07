@@ -1,4 +1,4 @@
-local BTExec = require "bt_exec"
+local BTCommon = require "bt_common"
 
 local M = {}
 
@@ -14,11 +14,11 @@ M.always_succeed= require("always_succeed")
 M.always_fail   = require("always_fail")
 
 function mt:tick()
-    local _, running = BTExec(self.root, self)
+    local _, running = BTCommon.execute(self.root, self)
     local lastRunning = self.running
     if lastRunning and lastRunning ~= running then
         if self[lastRunning].is_open then
-            lastRunning:close()
+            BTCommon.close(lastRunning, self)
         end
     end
     self.running = running
