@@ -13,7 +13,9 @@ local root = Priority(
         HpCheck(50),
         Flee(5)
     ),
-    Attack(20)
+    Sequence(
+        Attack(20)
+    )
 )
 
 -- print(inspect(root))

@@ -15,7 +15,7 @@ function mt:run(tick)
         return Const.SUCCESS
     else
         print(N, "attacking.....")
-        return Const.RUNNING, self
+        return Const.RUNNING
     end
 end
 

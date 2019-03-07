@@ -7,6 +7,7 @@ mt.__index = mt
 
 M.priority  = require("priority")
 M.sequence  = require("sequence")
+M.parallel  = require("parallel")
 M.invert    = require("invert")
 M.mem_sequence  = require("mem_sequence")
 M.mem_priority  = require("mem_priority")

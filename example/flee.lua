@@ -16,7 +16,7 @@ function mt:run(tick)
         return Const.SUCCESS
     else
         print(N, "fleeing.......")
-        return Const.RUNNING, self
+        return Const.RUNNING
     end
 end
 

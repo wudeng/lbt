@@ -23,7 +23,7 @@ function M.execute(node, tick)
     _open(node, tick)
     local status, running = node:run(tick)
     if status == Const.RUNNING then
-        return status, running
+        return status, running or node
     else
         _close(node, tick)
         return status
