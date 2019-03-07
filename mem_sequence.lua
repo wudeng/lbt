@@ -22,10 +22,10 @@ function mt:run(tick)
     return Const.SUCCESS
 end
 
-local function new(children)
+local function new(...)
     local obj = {
         name = "mem_sequence",
-        children = children,
+        children = {...},
     }
     setmetatable(obj, mt)
     return obj
