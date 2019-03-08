@@ -25,7 +25,9 @@ close 的时候需要往黑板清除 is_open 状态。
 每个节点有三个回调函数：
 
 * open(tick)
+    * return bool value indicates weather it can be proceeded
 * run(tick)
+    * return Const.RUNNING, Const.FAIL, Const.SUCCEED
 * close(tick)
 
 tick 是为 AI 分配的行为树运行实例。每一帧执行一次 tick 实例的 tick 函数。
@@ -36,9 +38,11 @@ local Const = require "behaviour_tree.const"
 local mt = {}
 mt.__index = mt
 
+-- return bool
 function mt:open()
 end
 
+-- return Const.SUCCESS, Const.FAIL, Const.RUNNING
 function mt:run()
 end
 

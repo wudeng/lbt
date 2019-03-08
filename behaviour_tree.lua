@@ -21,7 +21,10 @@ function mt:tick()
     local lastOpen = self.last_open
     for node in pairs(lastOpen) do
         if not openNodes[node] and self[node].is_open then
-            BTCommon.close(node, self)
+            self[node].is_open = false
+            if node.close then
+                node:close(self)
+            end
         end
         lastOpen[node] = nil
     end
@@ -30,9 +33,11 @@ function mt:tick()
 end
 
 -- tick 实例：保存树的状态和黑板, [node] -> {is_open:boolean, ...}
+-- @param robot     The robot to control
+-- @param root      The behaviour tree root
+-- @param log       [optional] the log function used to debug
 function M.new(robot, root, log)
     local obj = {
-        running = nil,      -- 记录上一次的运行节点
         robot = robot,
         root = root,
         open_nodes = {},    -- 上一次 tick 运行中的节点

@@ -16,20 +16,19 @@ local root = Priority(
     Attack(20)
 )
 
--- print(inspect(root))
 
 local Tick = BT.new(robot, root)
--- print(inspect(Tick))
-print = function() end
-for i = 1, 3000000 do
-    -- print("================", i)
-    -- if i == 10 then
-    --     print(">>>>>>>> hp == 10")
-    --     robot.hp = 10
-    -- end
-    -- if i == 18 then
-    --     print(">>>>>>>> hp == 100")
-    --     robot.hp = 100
-    -- end
+
+-- print = function() end
+for i = 1, 30 do
+    print("================", i)
+    if i == 10 then
+        print(">>>>>>>> hp == 10")
+        robot.hp = 10
+    end
+    if i == 18 then
+        print(">>>>>>>> hp == 100")
+        robot.hp = 100
+    end
     Tick:tick()
 end

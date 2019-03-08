@@ -39,7 +39,10 @@ end
 function mt:close(tick)
     for _, node in ipairs(self.children) do
         if tick[node] and tick[node].is_open then
-            BTCommon.close(node, tick)
+            tick[node].is_open = false
+            if node.close then
+                node:close(tick)
+            end
         end
     end
 end
