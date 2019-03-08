@@ -15,22 +15,29 @@ M.always_succeed= require("always_succeed")
 M.always_fail   = require("always_fail")
 
 function mt:tick()
-    local _, running = BTCommon.execute(self.root, self)
-    local lastRunning = self.running
-    if lastRunning and lastRunning ~= running then
-        if self[lastRunning].is_open then
-            BTCommon.close(lastRunning, self)
+    BTCommon.execute(self.root, self)
+    -- close open nodes if necessary
+    local openNodes = self.open_nodes
+    local lastOpen = self.last_open
+    for node in pairs(lastOpen) do
+        if not openNodes[node] and self[node].is_open then
+            BTCommon.close(node, self)
         end
+        lastOpen[node] = nil
     end
-    self.running = running
+    self.last_open = openNodes
+    self.open_nodes = lastOpen  -- empty table
 end
 
 -- tick 实例：保存树的状态和黑板, [node] -> {is_open:boolean, ...}
-function M.new(robot, root)
+function M.new(robot, root, log)
     local obj = {
         running = nil,      -- 记录上一次的运行节点
         robot = robot,
         root = root,
+        open_nodes = {},    -- 上一次 tick 运行中的节点
+        last_open = {},
+        log = log
     }
     setmetatable(obj, mt)
     return obj

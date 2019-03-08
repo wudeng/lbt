@@ -18,12 +18,26 @@ local function _close(node, tick)
     end
 end
 
+local function st2str(status)
+    if status == Const.SUCCESS then
+        return "SUCCESS"
+    elseif status == Const.FAIL then
+        return "FAIL"
+    else
+        return "RUNNING"
+    end
+end
+
 function M.execute(node, tick)
     tick[node] = tick[node] or {}
     _open(node, tick)
-    local status, running = node:run(tick)
+    local status = node:run(tick)
+    if tick.log and not node.children then
+        tick.log("btnode:", node.name, st2str(status))
+    end
     if status == Const.RUNNING then
-        return status, running or node
+        tick.open_nodes[node] = true
+        return status
     else
         _close(node, tick)
         return status

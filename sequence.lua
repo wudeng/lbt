@@ -6,10 +6,8 @@ mt.__index = mt
 
 function mt:run(tick)
     for _, node in ipairs(self.children) do
-        local status, running = BTCommon.execute(node, tick)
-        if status == Const.RUNNING then
-            return status, running
-        elseif status == Const.FAIL then
+        local status = BTCommon.execute(node, tick)
+        if status ~= Const.SUCCESS then
             return status
         end
     end

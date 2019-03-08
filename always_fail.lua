@@ -5,9 +5,9 @@ local mt = {}
 mt.__index = mt
 
 function mt:run(tick)
-    local status, running = BTCommon.execute(self.child, tick)
+    local status = BTCommon.execute(self.child, tick)
     if status == Const.RUNNING then
-        return status, running
+        return status
     else
         return Const.FAIL
     end

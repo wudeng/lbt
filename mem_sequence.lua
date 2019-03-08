@@ -11,11 +11,12 @@ end
 function mt:run(tick)
     local child = tick[self].runningChild
     for i = child, #self.children do
-        local status, running = BTCommon.execute(self.children[i], tick)
+        local status = BTCommon.execute(self.children[i], tick)
+        if status == Const.FAIL then
+            return status
+        end
         if status == Const.RUNNING then
             tick[self].runningChild = i
-            return status, running
-        elseif status == Const.FAIL then
             return status
         end
     end

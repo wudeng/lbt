@@ -33,7 +33,7 @@ function mt:run(tick)
         return Const.FAIL
     end
 
-    return Const.RUNNING, self
+    return Const.RUNNING
 end
 
 function mt:close(tick)
