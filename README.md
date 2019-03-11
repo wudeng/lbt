@@ -25,7 +25,8 @@ close 的时候需要往黑板清除 is_open 状态。
 每个节点有三个回调函数：
 
 * open(tick)
-    * return bool value indicates weather it can be proceeded
+    * return Const.SUCCESS, Const.FAIL, 不执行 run，提前返回
+    * return nil, 继续执行 run
 * run(tick)
     * return Const.RUNNING, Const.FAIL, Const.SUCCEED
 * close(tick)
@@ -38,7 +39,7 @@ local Const = require "behaviour_tree.const"
 local mt = {}
 mt.__index = mt
 
--- return bool
+-- return Const.SUCCESS, Const.FAIL, nil
 function mt:open()
 end
 
