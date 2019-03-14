@@ -14,7 +14,7 @@ end
 
 local function output(node, tick, status)
     if tick.log and not node.children then
-        tick.log("btnode:", node.name, tostring(node), st2str(status))
+        tick.log("btnode:", tostring(node), st2str(status))
     end
 end
 
