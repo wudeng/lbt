@@ -4,36 +4,40 @@ local BTCommon = require "bt_common"
 local mt = {}
 mt.__index = mt
 
+-- luacheck: ignore 561
 function mt:run(tick)
-    local success_count = 0
-    local fail_count = 0
+    local saw_success = false
+    local saw_fail = false
+    local saw_running = false
+    local saw_all_fail = true
+    local saw_all_success = true
+
     for _, node in ipairs(self.children) do
         local status = BTCommon.execute(node, tick)
-        if status == Const.SUCCESS then
-            success_count = success_count + 1
-            if self.policy == Const.SUCCESS_ONE then
-                return Const.SUCCESS
-            end
-        end
         if status == Const.FAIL then
-            fail_count = fail_count + 1
-            if self.policy == Const.FAIL_ONE then
-                return Const.FAIL
-            end
+            saw_fail = true
+            saw_all_success = false
+        elseif status == Const.SUCCESS then
+            saw_success = true
+            saw_all_fail = false
+        else
+            saw_running = true
+            saw_all_fail = false
+            saw_all_success = false
         end
     end
 
-    local all = #self.children
+    local result = saw_running and Const.RUNNING or Const.FAIL
 
-    if self.policy == Const.SUCCESS_ALL and success_count == all then
-        return Const.SUCCESS
+    if self.fail_policy == Const.FAIL_ALL and saw_all_fail or
+       self.fail_policy == Const.FAIL_ONE and saw_fail then
+        result = Const.FAIL
+    elseif self.success_policy == Const.SUCCESS_ALL and saw_all_success or
+       self.success_policy == Const.SUCCESS_ONE and saw_success then
+       result = Const.SUCCESS
     end
 
-    if self.policy == Const.FAIL_ALL and fail_count == all then
-        return Const.FAIL
-    end
-
-    return Const.RUNNING
+    return result
 end
 
 function mt:close(tick)
@@ -47,10 +51,14 @@ function mt:close(tick)
     end
 end
 
-local function new(policy, ...)
+-- 并行执行
+local function new(fail_policy, success_policy, ...)
+    assert(fail_policy == Const.FAIL_ALL or fail_policy == Const.FAIL_ONE)
+    assert(success_policy == Const.SUCCESS_ALL or success_policy == Const.SUCCESS_ONE)
     local obj = {
         name = "parallel",
-        policy = policy,
+        fail_policy = fail_policy,
+        success_policy = success_policy,
         children = {...},
     }
     setmetatable(obj, mt)
