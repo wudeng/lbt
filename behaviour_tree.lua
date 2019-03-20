@@ -30,6 +30,7 @@ function mt:tick()
     end
     self.last_open = openNodes
     self.open_nodes = lastOpen  -- empty table
+    self.frame = self.frame + 1
 end
 
 -- tick 实例：保存树的状态和黑板, [node] -> {is_open:boolean, ...}
@@ -42,6 +43,7 @@ function M.new(robot, root, log)
         root = root,
         open_nodes = {},    -- 上一次 tick 运行中的节点
         last_open = {},
+        frame = 0,          -- 帧数
         log = log
     }
     setmetatable(obj, mt)
