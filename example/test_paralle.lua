@@ -11,6 +11,7 @@ local robot = {id = 1, hp = 100}
 -- 高优先级打断低优先级
 local root = Parallel(
     Const.FAIL_ONE,
+    Const.SUCCESS_ALL,
     Sequence(
         HpCheck(50),
         Flee(5)

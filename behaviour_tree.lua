@@ -11,6 +11,8 @@ M.parallel  = require("parallel")
 M.invert    = require("invert")
 M.mem_sequence  = require("mem_sequence")
 M.mem_priority  = require("mem_priority")
+M.weight_sequence = require("weight_sequence")
+M.weight_priority = require("weight_priority")
 M.always_succeed= require("always_succeed")
 M.always_fail   = require("always_fail")
 
