@@ -4,23 +4,27 @@ local BTCommon = require "bt_common"
 local mt = {}
 mt.__index = mt
 
-function mt:open(tick)
-    tick[self].runningChild = 1
+function mt:open(_, node_data)
+    node_data.runningChild = 1
 end
 
-function mt:run(tick)
-    local child = tick[self].runningChild
+function mt:run(tick, node_data)
+    local child = node_data.runningChild
     for i = child, #self.children do
         local status = BTCommon.execute(self.children[i], tick)
         if status == Const.FAIL then
             return status
         end
         if status == Const.RUNNING then
-            tick[self].runningChild = i
+            node_data.runningChild = i
             return status
         end
     end
     return Const.SUCCESS
+end
+
+function mt:close(_, node_data)
+    node_data.runningChild = 1
 end
 
 local function new(...)
