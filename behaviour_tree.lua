@@ -22,10 +22,11 @@ function mt:tick()
     local openNodes = self.open_nodes
     local lastOpen = self.last_open
     for node in pairs(lastOpen) do
-        if not openNodes[node] and self[node].is_open then
-            self[node].is_open = false
+        local node_data = self[node]
+        if not openNodes[node] and node_data.is_open then
+            node_data.is_open = false
             if node.close then
-                node:close(self)
+                node:close(self, node_data)
             end
         end
         lastOpen[node] = nil

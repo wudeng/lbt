@@ -42,10 +42,11 @@ end
 
 function mt:close(tick)
     for _, node in ipairs(self.children) do
-        if tick[node] and tick[node].is_open then
-            tick[node].is_open = false
+        local node_data = tick[node]
+        if node_data.is_open then
+            node_data.is_open = false
             if node.close then
-                node:close(tick)
+                node:close(tick, node_data)
             end
         end
     end
