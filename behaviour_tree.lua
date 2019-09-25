@@ -1,4 +1,5 @@
-local BTCommon = require "bt_common"
+local BTCommon  = require "bt_common"
+local BTExePath = require "bt_exepath"
 
 local M = {}
 
@@ -17,7 +18,8 @@ M.always_succeed= require("always_succeed")
 M.always_fail   = require("always_fail")
 
 function mt:tick()
-    BTCommon.execute(self.root, self)
+    self.exepath:clear()
+    BTCommon.execute(self.root, self, 0)
     -- close open nodes if necessary
     local openNodes = self.open_nodes
     local lastOpen = self.last_open
@@ -34,6 +36,10 @@ function mt:tick()
     self.last_open = openNodes
     self.open_nodes = lastOpen  -- empty table
     self.frame = self.frame + 1
+
+    if self.log then
+        self.log(self.exepath.path)
+    end
 end
 
 -- tick 实例：保存树的状态和黑板, [node] -> {is_open:boolean, ...}
@@ -47,7 +53,8 @@ function M.new(robot, root, log)
         open_nodes = {},    -- 上一次 tick 运行中的节点
         last_open = {},
         frame = 0,          -- 帧数
-        log = log
+        log = log,
+        exepath = BTExePath.create(),
     }
     setmetatable(obj, mt)
     return obj

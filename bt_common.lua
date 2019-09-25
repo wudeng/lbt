@@ -12,23 +12,24 @@ local function st2str(status)
     end
 end
 
-local function output(node, tick, status)
-    if tick.log and not node.children then
-        tick.log("btnode:", tostring(node), st2str(status))
-    end
-end
 
-function M.execute(node, tick)
+function M.execute(node, tick, level)
     local node_data = tick[node] or {}
+    node_data.__level = level
     tick[node] = node_data
+
+    if tick.log then
+        tick.exepath:on_exe_node(tick, level, node)
+    end
 
     -- open callback
     if not node_data.is_open then
         if node.open then
             local ret = node:open(tick, node_data)
             if ret then
-                assert(ret == Const.SUCCESS or ret == Const.FAIL)
-                output(node, tick, ret)
+                if tick.log then
+                    tick.exepath:on_node_status(node, st2str(ret))
+                end
                 return ret
             end
         end
@@ -37,9 +38,9 @@ function M.execute(node, tick)
 
     -- run callback, get status
     local status = node:run(tick, node_data)
-
-    -- debug output
-    output(node, tick, status)
+    if tick.log then
+        tick.exepath:on_node_status(tick, node, st2str(status))
+    end
 
     -- close callback
     if status == Const.RUNNING then

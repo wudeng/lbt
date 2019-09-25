@@ -5,7 +5,7 @@ local mt = {}
 mt.__index = mt
 
 -- luacheck: ignore 561
-function mt:run(tick)
+function mt:run(tick, data)
     local saw_success = false
     local saw_fail = false
     local saw_running = false
@@ -13,7 +13,7 @@ function mt:run(tick)
     local saw_all_success = true
 
     for _, node in ipairs(self.children) do
-        local status = BTCommon.execute(node, tick)
+        local status = BTCommon.execute(node, tick, data.__level + 1)
         if status == Const.FAIL then
             saw_fail = true
             saw_all_success = false
@@ -43,7 +43,7 @@ end
 function mt:close(tick)
     for _, node in ipairs(self.children) do
         local node_data = tick[node]
-        if node_data.is_open then
+        if node_data and node_data.is_open then
             node_data.is_open = false
             if node.close then
                 node:close(tick, node_data)

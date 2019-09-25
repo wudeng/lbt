@@ -20,7 +20,7 @@ function mt:run(tick, node_data)
     local child = node_data.runningChild
     for i = child, #node_data.indexes do
         local index = node_data.indexes[i]
-        local status = BTCommon.execute(self.children[index], tick)
+        local status = BTCommon.execute(self.children[index], tick, node_data.__level + 1)
         if status == Const.SUCCESS then
             return status
         end
@@ -30,6 +30,19 @@ function mt:run(tick, node_data)
         end
     end
     return Const.FAIL
+end
+
+function mt:close(tick, node_data)
+    node_data.runningChild = 1
+    for _, node in ipairs(self.children) do
+        local child_data = tick[node]
+        if child_data and child_data.is_open then
+            child_data.is_open = false
+            if node.close then
+                node:close(tick, child_data)
+            end
+        end
+    end
 end
 
 local function new(weight, ...)
